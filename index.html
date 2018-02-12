@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang= "en">
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, intial-scale=1"> 
+
+	<link rel="stylesheet"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+ 	<link rel="stylesheet"href="styles.css">
+
+<!-- jQuery library -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+ 
+
+<!-- Latest compiled JavaScript -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/alasql/0.2/alasql.min.js"></script> 
+  
+
+	<title> Orcas</title>
+</head>
+<h1> Welcome </h1>
+<!-- <h2><img src="cropped orcas.jpg" width="1200">
+</h2> -->
+
+<body>
+	<script>
+	alasql("CREATE TABLE loggedin (name STRING, password STRING)");
+    alasql("CREATE TABLE orcas (age INT, name STRING, park STRING, password STRING)");
+    alasql("INSERT INTO orcas VALUES (49,'Corky II', 'California', 'Corky II')");
+    alasql("INSERT INTO orcas VALUES (14,'Ikaika', 'California', 'Ikaika')");
+    alasql("INSERT INTO orcas VALUES (11,'Kalia', 'California', 'Kalia')");
+    alasql("INSERT INTO orcas VALUES (40,'Kasatka', 'California', 'Kasatka')");
+    alasql("INSERT INTO orcas VALUES (23,'Keet', 'California', 'Keet')");
+    alasql("INSERT INTO orcas VALUES (4,'Makani', 'California', 'Makani')");
+    alasql("INSERT INTO orcas VALUES (15,'Nakai', 'California', 'Nakai')");
+    alasql("INSERT INTO orcas VALUES (28,'Orkid', 'California', 'Orkid')");
+    alasql("INSERT INTO orcas VALUES (23,'Shouka', 'California', 'Shouka')");
+    alasql("INSERT INTO orcas VALUES (38,'Ulises', 'California', 'Ulises')");
+    alasql("INSERT INTO orcas VALUES (1,'Amaya', 'California', 'Amaya')");
+    alasql("INSERT INTO orcas VALUES (41,'Katina', 'Florida', 'Katina')");
+    alasql("INSERT INTO orcas VALUES (28,'Kayla', 'Florida', 'Kayla')");
+    alasql("INSERT INTO orcas VALUES (6,'Makaio', 'Florida', 'Makaio')");
+    alasql("INSERT INTO orcas VALUES (9,'Malia', 'Florida', 'Malia')");
+    alasql("INSERT INTO orcas VALUES (11,'Nalani', 'Florida', 'Nalani')");
+    alasql("INSERT INTO orcas VALUES (36,'Tilikum', 'Florida', 'Tilikum')");
+    alasql("INSERT INTO orcas VALUES (11,'Trua', 'Florida', 'Trua')");
+    alasql("INSERT INTO orcas VALUES (5,'Kyuquot', 'Texas', 'Kyuquot')");
+    alasql("INSERT INTO orcas VALUES (2,'Kamea', 'Texas', 'Kamea')");
+    alasql("INSERT INTO orcas VALUES (6,'Sakari', 'Texas', 'Sakari')");
+    alasql("INSERT INTO orcas VALUES (25,'Takara', 'Texas', 'Takara')");
+    alasql("INSERT INTO orcas VALUES (17,'Tuar', 'Texas', 'Tuar')");
+    function getPark(homepark){
+    	if (homepark == 'Florida'){
+    		var list = alasql("SELECT name FROM orcas WHERE park = 'Florida'");
+    	}
+    	else if (homepark == 'Texas'){
+    		var list = alasql("SELECT name FROM orcas WHERE park == 'Texas'");
+    	}
+    	else{
+    		var list = alasql("SELECT name FROM orcas WHERE park == 'California'");
+    	}
+    	var text = ""
+    	for (i = 0; i < list.length; i++){
+    		text += list[i].name + '<br>';
+    	}
+    	document.getElementById("demo").innerHTML = text;
+    	
+    }
+    
+    function signUp(){
+    	var x = document.getElementById("frm2");
+    	var username = x.elements[0].value;
+   		var pass = x.elements[1].value;
+   		var age = x.elements[2].value;
+   		var park = x.elements[1].value;
+   		var match = alasql("SELECT name FROM orcas WHERE name == ? AND password == ?", [username, pass]);
+    	if (match.length > 0){
+    		alert('Sign Up Failed! Try Again!')
+    	}
+    	else{
+    		alasql("INSERT INTO orcas VALUES (?,?, ?, ?)", [age, username, park, pass]);
+    		alert('Sign Up Successful!')
+        var list = alasql("SELECT * FROM orcas");
+        var text = ""
+        for (i = 0; i < list.length; i++){
+          text += list[i].name + '<br>';
+        }
+        document.getElementById("demo").innerHTML = text;
+        alert(text)
+    	}	
+    }
+   	function signIn(){
+   		var x = document.getElementById("frm1");
+   		var username = x.elements[0].value;
+   		var pass = x.elements[1].value;
+   		console.log(pass)
+   		var match = alasql("SELECT name FROM orcas WHERE name = ? AND password = ?", [username, pass]);
+    	if (match.length == 1){
+    		console.log("HELLOOOOOO")
+    		alert('You are loggged in as ' + username + '!')
+    		var text = 'Hello, ' + username + '!';
+    		document.getElementById("demo").innerHTML = text;
+    		console.log(document.getElementById("demo").innerHTML);
+    		alasql("INSERT INTO loggedin VALUES (?,?)", [username, password]);
+    		console.log(alasql("SELECT name FROM loggedin"));
+    		alert(alasql("SELECT name FROM loggedin").length)
+    	}
+    	else{
+    		alert('Log In Failed! Try Again!')
+    	}	
+   	}
+   	function helloLoggedIn(){
+   		var list = alasql("SELECT name FROM loggedin");
+   		alert(list.length)
+   		if (list.length == 0){
+   			return;
+   		}
+   		alert(list.length)
+   		var text = 'Hello, ' + list[list.length-1].name + '!';
+   		alert(list.length)
+    	document.getElementById("demo").innerHTML = text;
+   	}
+  </script>
+	<div class="container"> 
+	<div class="dropdown">
+  		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Dropdown
+  		<span class="caret"></span></button>
+  		<ul class="dropdown-menu">
+    		<li> <a href="#"> Action </a></li>
+			<li> <a href="#"> Other </a></li>
+			<li> <a href="#"> Other Action </a></li>
+			<li role="separator" class="divider"></li> 
+			<li><a href="#"> Separated Link </a></li>
+  		</ul>
+	</div>
+
+	<div class="btn-group" role="group" aria-label="Basic example">
+ 	 	<div class="btn-group" role="group" aria-label="First group">
+    		<button type="button" class="btn btn-secondary" onclick="getPark('Florida')">Florida</button>
+    		<button type="button" class="btn btn-secondary" onclick="getPark('California')">California</button>
+    		<button type="button" class="btn btn-secondary" onclick="getPark('Texas')">Texas</button>
+  		</div>
+	</div>
+	<div>
+	<form id="frm1" class="form-inline">
+  		<div class="form-group">
+   			<label class="sr-only" for="exampleInputEmail3">Name</label>
+    		<input type="text" class="form-control" id="exampleInputEmail3" placeholder="Enter name">
+  		</div>
+  		<div class="form-group">
+    		<label class="sr-only" for="exampleInputPassword3">Password</label>
+    		<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+  		</div>
+  		<button type="submit" class="btn btn-primary" onclick="signIn()">Sign in</button>
+	</form>
+	</div>
+	<div> 
+		<p id="demo" onload="helloLoggedIn()"> </p>
+	</div>
+	<div>
+	<form id="frm2" class="form-inline">
+  		<div class="form-group">
+   			<label class="sr-only" for="exampleInputEmail3">Name</label>
+    		<input type="text" class="form-control" id="exampleInputEmail3" placeholder="Enter name">
+  		</div>
+  		<div class="form-group">
+    		<label class="sr-only" for="exampleInputPassword3">Password</label>
+    		<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+  		</div>
+  		<div class="form-group">
+    		<label class="sr-only" for="exampleInputAge">Age</label>
+    		<input type="integer" class="form-control" id="exampleInputPassword3" placeholder="Age">
+  		</div>
+  		<div class="form-group">
+    		<label class="sr-only" for="exampleInputPassword3">Park</label>
+    		<input type="text" class="form-control" id="exampleInputPassword3" placeholder="Park">
+  		</div>
+  		<button type="submit" class="btn btn-primary" onclick="signUp()">Sign Up</button>
+	</form>
+	</div>
+
+</div>
+</body>
+</html>
